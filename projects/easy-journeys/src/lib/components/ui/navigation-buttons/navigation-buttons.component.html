@@ -1,0 +1,27 @@
+<div class="easyFormControls" [ngClass]="{ 'justify-content-end': !prevVisible }">
+  <div class="easyFormBack iconButton iconButton--Medium" *ngIf="prevVisible">
+    <button
+      [disabled]="prevDisabled"
+      type="button"
+      class="button-reset makeTheBtnBigger"
+      title="Vrati se"
+      aria-label="Vrati se"
+      easyPreventDoubleClick
+      (preventDoubleClick)="clickPrev.emit()"
+    >
+      <img
+        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4NCiAgICA8ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPg0KICAgICAgICA8cGF0aCBkPSJNMCAwSDI0VjI0SDB6Ii8+DQogICAgICAgIDxwYXRoIGZpbGw9IiMwRjA2NjQiIGQ9Ik00LjE1NyAxMi45MzhjLS4yMS0uNjEtLjIxLTEuMjY3IDAtMS44NzZ2LS4wMzVoLjAxMWMuMTQzLS4zOTguMzY3LS43NzMuNjktMS4wOTFsNS41My01LjQzNiAxLjQgMS4zNzYtNS4yNCA1LjE1aDkuNDkxYzIuMTg1IDAgMy45NjEgMS43NDcgMy45NjEgMy44OTN2NC4zNzdoLTEuOTh2LTQuMzc3YzAtMS4wNzItLjg5LTEuOTQ2LTEuOTgtMS45NDZINi41NDdsNS4yNCA1LjE1MS0xLjQgMS4zNzYtNS41My01LjQzNmMtLjMyMy0uMzE3LS41NDctLjY5My0uNjktMS4wOWgtLjAxdi0uMDM2eiIvPg0KICAgIDwvZz4NCjwvc3ZnPg0K"
+        alt="Vrati se"
+      />
+    </button>
+  </div>
+  <easy-submit-button
+    *ngIf="nextVisible"
+    [disabled]="nextDisabled"
+    [buttonText]="nextButtonText"
+    buttonCssClass="makeTheBtnBigger"
+    [form]="form"
+    easyPreventDoubleSubmit
+    (preventDoubleSubmit)="clickNext.emit()"
+  ></easy-submit-button>
+</div>

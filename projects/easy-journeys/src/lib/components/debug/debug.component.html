@@ -1,0 +1,177 @@
+<button
+  type="button"
+  class="btn-close-debugger"
+  [ngClass]="{ 'debugger-closed': !isDebuggerVisible }"
+  (click)="toggleDebuggerVisibility()"
+  title="Toggle Debugger"
+>
+  <span>Toggle Debugger</span>
+</button>
+<div id="theDebugger" *ngIf="isDebuggerVisible">
+  <header>
+    <h3>Debug panel <small class="d-block text-muted pt-1">(only visible in development environment)</small></h3>
+  </header>
+
+  <h4 (click)="toggleSection('sessionOpen')" [class.open]="sessionOpen">Session</h4>
+  <table *ngIf="sessionOpen" class="table table-sm">
+    <tr>
+      <td>hasSession:</td>
+      <td>
+        <span [ngClass]="setResponseClasses(hasSession)" title="{{ hasSession }}">{{ hasSession }}</span>
+      </td>
+    </tr>
+    <tr>
+      <td>valid:</td>
+      <td>
+        <span [ngClass]="setResponseClasses(sessionValid)" title="{{ sessionValid }}">{{ sessionValid }}</span>
+      </td>
+    </tr>
+    <tr>
+      <td>expires:</td>
+      <td>{{ expires }}</td>
+    </tr>
+  </table>
+  <hr />
+
+  <!-- ############################## MODELS ########################################## -->
+  <h4 (click)="toggleSection('modelsOpen')" [class.open]="modelsOpen">Models</h4>
+  <table *ngIf="modelsOpen" class="table table-sm">
+    <ng-container *ngFor="let field of models">
+      <tr
+        (click)="showHideObjectFields(field)"
+        [ngClass]="{ 'cursor-pointer': field.value && isObject(field.value) }"
+        *ngIf="field.type !== 'formTitle'"
+      >
+        <td>{{ field.key }}</td>
+        <td>
+          <span *ngIf="!isObject(field.value)" [ngClass]="setResponseClasses(field.value)" title="{{ field.value }}">{{
+            field.value
+          }}</span>
+          <span
+            *ngIf="field.value && isObject(field.value)"
+            class="fields-toggle"
+            title="{{ field.value }}"
+            [class.open]="isObjectFieldsVisible(field.key)"
+          ></span>
+        </td>
+      </tr>
+      <ng-container *ngIf="isObject(field.value) && isObjectFieldsVisible(field.key)">
+        <ng-container *ngTemplateOutlet="fieldValueObject; context: { field: field.value, index: 1 }"></ng-container>
+      </ng-container>
+    </ng-container>
+  </table>
+  <hr />
+
+  <!-- ############################## STEPS ########################################## -->
+  <h4 (click)="toggleSection('fieldsOpen')" [class.open]="fieldsOpen">Steps</h4>
+  <ng-container *ngIf="fieldsOpen">
+    <div *ngFor="let step of activeSteps">
+      <h5 class="d-flex" [ngClass]="{ 'is-valid-step': step.valid, 'is-invalid-step': !step.valid }">
+        <span>{{ step.progressBarTitle }}</span>
+        <span
+          class="ml-auto"
+          [ngClass]="setResponseClasses(step.valid)"
+          title="{{ step.valid ? 'Valid 🙂' : 'Invalid 😡' }}"
+          >{{ step.valid }}</span
+        >
+      </h5>
+
+      <table class="table table-sm">
+        <!-- ############################## STEP FIELDS ########################################## -->
+        <ng-container *ngFor="let field of step.children">
+          <ng-container *ngTemplateOutlet="stepChildren; context: { field: field, index: 0 }"></ng-container>
+        </ng-container>
+
+        <!-- ############################## API DATA ########################################## -->
+        <ng-container *ngFor="let field of step.apiData; let index">
+          <tr
+            (click)="showHideObjectFields(field)"
+            [ngClass]="{ 'cursor-pointer': field.value && isObject(field.value) }"
+          >
+            <td>API: {{ field.id }}</td>
+            <td>
+              <span
+                *ngIf="!isObject(field.value)"
+                [ngClass]="setResponseClasses(field.value)"
+                title="{{ field.value }}"
+                >{{ field.value }}</span
+              >
+              <span
+                *ngIf="field.value && isObject(field.value)"
+                class="fields-toggle"
+                title="{{ field.value }}"
+                [class.open]="isObjectFieldsVisible(field.id)"
+              ></span>
+            </td>
+          </tr>
+          <ng-container *ngIf="isObject(field.value) && isObjectFieldsVisible(field.id)">
+            <ng-container
+              *ngTemplateOutlet="fieldValueObject; context: { field: field.value, index: 1 }"
+            ></ng-container>
+          </ng-container>
+        </ng-container>
+      </table>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #stepChildren let-field="field" let-index="index">
+  <tr
+    (click)="showHideObjectFields(field)"
+    [ngClass]="{ 'cursor-pointer': (field.value && isObject(field.value)) || isSubform(field) }"
+    *ngIf="!fieldTypesExcludedFromDebugger.includes(field.type)"
+  >
+    <td *ngIf="index > 0" [style.padding-left.rem]="[index]">{{ '- ' + field.id }}</td>
+    <td *ngIf="index === 0">{{ field.id }}</td>
+    <td>
+      <span *ngIf="!isObject(field.value)" [ngClass]="setResponseClasses(field.value)" title="{{ field.value }}">{{
+        field.value
+      }}</span>
+      <span
+        *ngIf="(field.value && isObject(field.value)) || isSubform(field)"
+        class="fields-toggle"
+        title="{{ field.value }}"
+        [class.open]="isObjectFieldsVisible(field.id)"
+      ></span>
+    </td>
+  </tr>
+  <ng-container *ngIf="isSubform(field) && isObjectFieldsVisible(field.id)">
+    <ng-container *ngFor="let child of field.children">
+      <ng-container *ngTemplateOutlet="stepChildren; context: { field: child, index: index + 1 }"></ng-container>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="isFieldGroup(field)">
+    <ng-container *ngFor="let child of field.children">
+      <ng-container *ngTemplateOutlet="stepChildren; context: { field: child, index: index }"></ng-container>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="isObject(field.value) && isObjectFieldsVisible(field.id)">
+    <ng-container
+      *ngTemplateOutlet="fieldValueObject; context: { field: field.value, index: index + 1 }"
+    ></ng-container>
+  </ng-container>
+</ng-template>
+
+<ng-template #fieldValueObject let-field="field" let-index="index">
+  <ng-container *ngFor="let item of field | keyvalue">
+    <tr (click)="showHideObjectFields(item)" [ngClass]="{ 'cursor-pointer': isObject(item.value) }">
+      <td [style.padding-left.rem]="[index]">{{ '- ' + item.key }}</td>
+      <td>
+        <span *ngIf="!isObject(item.value)" [ngClass]="setResponseClasses(item.value)" title="{{ item.value }}">{{
+          item.value
+        }}</span>
+        <span
+          *ngIf="item.value && isObject(item.value)"
+          class="fields-toggle"
+          title="{{ item.value }}"
+          [class.open]="isObjectFieldsVisible(item.key)"
+        ></span>
+      </td>
+    </tr>
+    <ng-container *ngIf="isObject(item) && isObjectFieldsVisible(item.key)">
+      <ng-container
+        *ngTemplateOutlet="fieldValueObject; context: { field: item.value, index: index + 1 }"
+      ></ng-container>
+    </ng-container>
+  </ng-container>
+</ng-template>

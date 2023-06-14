@@ -1,0 +1,10 @@
+<easy-page-title *ngIf="step.title" [title]="step.title" [description]="step.description"></easy-page-title>
+<easy-controls [form]="form" [config]="step.children"></easy-controls>
+<easy-navigation-buttons
+  (clickNext)="journeyService.next()"
+  (clickPrev)="journeyService.previous()"
+  *ngIf="step.type === 'step' && step.navigation.enabled"
+  [nextVisible]="step.navigation.next.visible"
+  [prevVisible]="step.navigation.previous.visible"
+  [form]="form"
+></easy-navigation-buttons>

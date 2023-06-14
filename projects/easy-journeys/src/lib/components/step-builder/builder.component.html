@@ -1,0 +1,3 @@
+<easy-step *ngIf="step.type === 'step'" [form]="form" [step]="step"></easy-step>
+<easy-custom-step *ngIf="step.type !== 'step'" [step]="step"></easy-custom-step>
+<easy-debug *ngIf="debug"></easy-debug>
