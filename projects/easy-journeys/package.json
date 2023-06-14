@@ -3,10 +3,47 @@
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^16.1.0",
-    "@angular/core": "^16.1.0"
+    "@angular/core": "^16.1.0",
+    "rxjs": "^7.8.0",
+    "lodash-es": "^4.17.21",
+    "@ng-select/ng-select": "^11.0.0",
+    "ngx-mask": "^15.0.2",
+    "@crosig/easy-forms": "^1.0.1"
   },
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "module": "fesm2022/crosig-easy-journeys.mjs",
+  "typings": "index.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./index.d.ts",
+      "esm2022": "./esm2022/crosig-easy-journeys.mjs",
+      "esm": "./esm2022/crosig-easy-journeys.mjs",
+      "default": "./fesm2022/crosig-easy-journeys.mjs"
+    }
+  },
+  "description": "This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.0.",
+  "main": "index.d.ts",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Croatia-Osiguranje/easy-journeys.git"
+  },
+  "keywords": [
+    "angular",
+    "forms"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Croatia-Osiguranje/easy-journeys/issues"
+  },
+  "homepage": "https://github.com/Croatia-Osiguranje/easy-journeys#readme"
 }
