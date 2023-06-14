@@ -1,6 +1,6 @@
 {
   "name": "@crosig/easy-journeys",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "peerDependencies": {
     "@angular/common": "^16.1.0",
     "@angular/core": "^16.1.0",
@@ -32,13 +32,15 @@
   "directories": {
     "lib": "lib"
   },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Croatia-Osiguranje/easy-journeys.git"
   },
   "keywords": [
-    "angular",
-    "forms"
+    "easy-journeys"
   ],
   "author": "",
   "license": "ISC",

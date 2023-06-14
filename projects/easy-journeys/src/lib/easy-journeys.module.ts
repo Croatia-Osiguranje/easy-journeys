@@ -50,7 +50,7 @@ import { SessionService } from './services/session.service';
   ],
 })
 export class EasyJourneysModule {
-  static forRoot(config: GlobalConfig): ModuleWithProviders<EasyFormsModule> {
+  static forRoot(config: GlobalConfig): ModuleWithProviders<EasyJourneysModule> {
     return {
       ngModule: EasyJourneysModule,
       providers: [
@@ -62,7 +62,7 @@ export class EasyJourneysModule {
     };
   }
 
-  static forChild(config: GlobalConfig): ModuleWithProviders<EasyFormsModule> {
+  static forChild(config: GlobalConfig): ModuleWithProviders<EasyJourneysModule> {
     return {
       ngModule: EasyJourneysModule,
       providers: [
